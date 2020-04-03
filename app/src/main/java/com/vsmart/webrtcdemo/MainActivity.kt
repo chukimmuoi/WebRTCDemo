@@ -2,7 +2,7 @@ package com.vsmart.webrtcdemo
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
+import kotlinx.android.synthetic.main.activity_main.*
 import org.webrtc.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // TODO: STEP 01
         //Initialize PeerConnectionFactory globals.
         //Params are context, initAudio,initVideo and videoCodecHwAcceleration
         //PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
@@ -23,12 +24,11 @@ class MainActivity : AppCompatActivity() {
                 .createInitializationOptions()
         )
 
-
         //Create a new PeerConnectionFactory instance.
         //PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
         val peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory()
 
-
+        // TODO: STEP 02
         //Now create a VideoCapturer instance.
         // Callback methods are there if you want to do something! Duh!
         val videoCapturerAndroid = createVideoCapturer()
@@ -36,30 +36,27 @@ class MainActivity : AppCompatActivity() {
         // More on this later!
         val constraints = MediaConstraints()
 
+        // TODO: STEP 03, 04
         //Create a VideoSource instance
-        val videoSource =
-            peerConnectionFactory.createVideoSource(videoCapturerAndroid)
+        val videoSource = peerConnectionFactory.createVideoSource(videoCapturerAndroid)
         val localVideoTrack = peerConnectionFactory.createVideoTrack("100", videoSource)
 
         //create an AudioSource instance
-        val audioSource =
-            peerConnectionFactory.createAudioSource(constraints)
-        val localAudioTrack =
-            peerConnectionFactory.createAudioTrack("101", audioSource)
+        val audioSource = peerConnectionFactory.createAudioSource(constraints)
+        val localAudioTrack = peerConnectionFactory.createAudioTrack("101", audioSource)
 
         //we will start capturing the video from the camera
         //width,height and fps
         videoCapturerAndroid?.startCapture(1000, 1000, 30)
 
+        // TODO: STEP 05
         //create surface renderer, init it and add the renderer to the track
-        val videoView =
-            findViewById<View>(R.id.surface_rendeer) as SurfaceViewRenderer
-        videoView.setMirror(true)
+        surfaceRender.setMirror(true)
 
         val rootEglBase = EglBase.create()
-        videoView.init(rootEglBase.eglBaseContext, null)
+        surfaceRender.init(rootEglBase.eglBaseContext, null)
 
-        localVideoTrack.addRenderer(VideoRenderer(videoView))
+        localVideoTrack.addRenderer(VideoRenderer(surfaceRender))
     }
 
     private fun createVideoCapturer(): VideoCapturer? {
