@@ -16,38 +16,31 @@ class MainActivity : AppCompatActivity() {
         //Initialize PeerConnectionFactory globals.
         //Params are context, initAudio,initVideo and videoCodecHwAcceleration
         //PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
-        //Initialize PeerConnectionFactory globals.
-        //Params are context, initAudio,initVideo and videoCodecHwAcceleration
-        //PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
         PeerConnectionFactory.initialize(
-            PeerConnectionFactory.InitializationOptions.builder(this).setEnableVideoHwAcceleration(
-                true
-            ).createInitializationOptions()
+            PeerConnectionFactory.InitializationOptions
+                .builder(this)
+                .setEnableVideoHwAcceleration(true)
+                .createInitializationOptions()
         )
 
 
         //Create a new PeerConnectionFactory instance.
         //PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
-        //Create a new PeerConnectionFactory instance.
-        //PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
-        val peerConnectionFactory =
-            PeerConnectionFactory.builder().createPeerConnectionFactory()
+        val peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory()
 
 
-        //Now create a VideoCapturer instance. Callback methods are there if you want to do something! Duh!
-        //Now create a VideoCapturer instance. Callback methods are there if you want to do something! Duh!
+        //Now create a VideoCapturer instance.
+        // Callback methods are there if you want to do something! Duh!
         val videoCapturerAndroid = createVideoCapturer()
-        //Create MediaConstraints - Will be useful for specifying video and audio constraints. More on this later!
-        //Create MediaConstraints - Will be useful for specifying video and audio constraints. More on this later!
+        //Create MediaConstraints - Will be useful for specifying video and audio constraints.
+        // More on this later!
         val constraints = MediaConstraints()
 
-        //Create a VideoSource instance
         //Create a VideoSource instance
         val videoSource =
             peerConnectionFactory.createVideoSource(videoCapturerAndroid)
         val localVideoTrack = peerConnectionFactory.createVideoTrack("100", videoSource)
 
-        //create an AudioSource instance
         //create an AudioSource instance
         val audioSource =
             peerConnectionFactory.createAudioSource(constraints)
@@ -56,11 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         //we will start capturing the video from the camera
         //width,height and fps
-        //we will start capturing the video from the camera
-        //width,height and fps
         videoCapturerAndroid?.startCapture(1000, 1000, 30)
 
-        //create surface renderer, init it and add the renderer to the track
         //create surface renderer, init it and add the renderer to the track
         val videoView =
             findViewById<View>(R.id.surface_rendeer) as SurfaceViewRenderer
@@ -101,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
         return null
     }
 }
