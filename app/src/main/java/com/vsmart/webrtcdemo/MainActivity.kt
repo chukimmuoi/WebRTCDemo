@@ -2,10 +2,11 @@ package com.vsmart.webrtcdemo
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import org.webrtc.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val TAG = "MainActivity"
 
@@ -51,12 +52,12 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: STEP 05
         //create surface renderer, init it and add the renderer to the track
-        surfaceRender.setMirror(true)
+        surfaceRenderLocal.setMirror(true)
 
         val rootEglBase = EglBase.create()
-        surfaceRender.init(rootEglBase.eglBaseContext, null)
+        surfaceRenderLocal.init(rootEglBase.eglBaseContext, null)
 
-        localVideoTrack.addRenderer(VideoRenderer(surfaceRender))
+        localVideoTrack.addRenderer(VideoRenderer(surfaceRenderLocal))
     }
 
     private fun createVideoCapturer(): VideoCapturer? {
@@ -90,5 +91,31 @@ class MainActivity : AppCompatActivity() {
         }
 
         return null
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.startCall -> {
+                start()
+            }
+            R.id.initCall -> {
+                call()
+            }
+            R.id.endCall -> {
+                hangup()
+            }
+        }
+    }
+
+    private fun start() {
+
+    }
+
+    private fun call() {
+
+    }
+
+    private fun hangup() {
+
     }
 }
