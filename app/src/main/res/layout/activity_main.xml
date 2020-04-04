@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -36,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:onClick="onClick"
             android:text="Start" />
 
         <Button
@@ -46,6 +46,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:enabled="false"
+            android:onClick="onClick"
             android:text="Call" />
 
         <Button
@@ -56,6 +57,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:enabled="false"
+            android:onClick="onClick"
             android:text="Hangup" />
     </LinearLayout>
 

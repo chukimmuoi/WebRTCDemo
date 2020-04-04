@@ -2,6 +2,7 @@ package com.vsmart.webrtcdemo
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import org.webrtc.*
@@ -13,7 +14,59 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
+    private fun createVideoCapturer(): VideoCapturer? {
+        Logging.d(TAG, "Creating capturer using camera1 API.")
+        return createCameraCapturer(Camera1Enumerator(false))
+    }
+
+    private fun createCameraCapturer(enumerator: CameraEnumerator): VideoCapturer? {
+        val deviceNames = enumerator.deviceNames
+        // First, try to find front facing camera
+        Logging.d(TAG, "Looking for front facing cameras.")
+        for (deviceName in deviceNames) {
+            if (enumerator.isFrontFacing(deviceName)) {
+                Logging.d(TAG, "Creating front facing camera capturer.")
+                val videoCapturer: VideoCapturer? = enumerator.createCapturer(deviceName, null)
+                if (videoCapturer != null) {
+                    return videoCapturer
+                }
+            }
+        }
+        // Front facing camera not found, try something else
+        Logging.d(TAG, "Looking for other cameras.")
+        for (deviceName in deviceNames) {
+            if (!enumerator.isFrontFacing(deviceName)) {
+                Logging.d(TAG, "Creating other camera capturer.")
+                val videoCapturer: VideoCapturer? = enumerator.createCapturer(deviceName, null)
+                if (videoCapturer != null) {
+                    return videoCapturer
+                }
+            }
+        }
+
+        return null
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.startCall -> {
+                Log.e(TAG, "-----> Start call")
+                start()
+            }
+            R.id.initCall -> {
+                Log.e(TAG, "-----> Init call")
+                call()
+            }
+            R.id.endCall -> {
+                Log.e(TAG, "-----> End call")
+                hangup()
+            }
+        }
+    }
+
+    private fun start() {
         // TODO: STEP 01
         //Initialize PeerConnectionFactory globals.
         //Params are context, initAudio,initVideo and videoCodecHwAcceleration
@@ -58,57 +111,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         surfaceRenderLocal.init(rootEglBase.eglBaseContext, null)
 
         localVideoTrack.addRenderer(VideoRenderer(surfaceRenderLocal))
-    }
-
-    private fun createVideoCapturer(): VideoCapturer? {
-        Logging.d(TAG, "Creating capturer using camera1 API.")
-        return createCameraCapturer(Camera1Enumerator(false))
-    }
-
-    private fun createCameraCapturer(enumerator: CameraEnumerator): VideoCapturer? {
-        val deviceNames = enumerator.deviceNames
-        // First, try to find front facing camera
-        Logging.d(TAG, "Looking for front facing cameras.")
-        for (deviceName in deviceNames) {
-            if (enumerator.isFrontFacing(deviceName)) {
-                Logging.d(TAG, "Creating front facing camera capturer.")
-                val videoCapturer: VideoCapturer? = enumerator.createCapturer(deviceName, null)
-                if (videoCapturer != null) {
-                    return videoCapturer
-                }
-            }
-        }
-        // Front facing camera not found, try something else
-        Logging.d(TAG, "Looking for other cameras.")
-        for (deviceName in deviceNames) {
-            if (!enumerator.isFrontFacing(deviceName)) {
-                Logging.d(TAG, "Creating other camera capturer.")
-                val videoCapturer: VideoCapturer? = enumerator.createCapturer(deviceName, null)
-                if (videoCapturer != null) {
-                    return videoCapturer
-                }
-            }
-        }
-
-        return null
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.startCall -> {
-                start()
-            }
-            R.id.initCall -> {
-                call()
-            }
-            R.id.endCall -> {
-                hangup()
-            }
-        }
-    }
-
-    private fun start() {
-
     }
 
     private fun call() {
