@@ -52,15 +52,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.startCall -> {
-                Log.e(TAG, "-----> Start call")
                 start()
             }
             R.id.initCall -> {
-                Log.e(TAG, "-----> Init call")
                 call()
             }
             R.id.endCall -> {
-                Log.e(TAG, "-----> End call")
                 hangup()
             }
         }
