@@ -4,7 +4,7 @@ import android.util.Log
 import org.webrtc.SdpObserver
 import org.webrtc.SessionDescription
 
-class CustomSdpObserver
+open class CustomSdpObserver
 constructor(var logTag: String) : SdpObserver {
 
     init {

@@ -14,8 +14,6 @@ import java.util.*
 class SignallingSocket {
     private val TAG = SignallingSocket::class.java.name
 
-    private var instance: SignallingSocket? = null
-
     private var roomName: String = ""
     private lateinit var socket: Socket
     private lateinit var callback: SignalingInterface
@@ -24,16 +22,20 @@ class SignallingSocket {
     var isInitiator    = false
     var isStarted      = false
 
-    fun getInstance() : SignallingSocket {
-        if (instance == null) {
-            instance = SignallingSocket()
-        }
-        instance?.let {
-            if (it.roomName.isNullOrEmpty())
-                it.roomName = "vivek17"
-        }
+    companion object {
+        private var instance: SignallingSocket? = null
 
-        return instance!!
+        fun getInstance() : SignallingSocket {
+            if (instance == null) {
+                instance = SignallingSocket()
+            }
+            instance?.let {
+                if (it.roomName.isNullOrEmpty())
+                    it.roomName = "vivek17"
+            }
+
+            return instance!!
+        }
     }
 
     fun init(signalingInterface: SignalingInterface) {

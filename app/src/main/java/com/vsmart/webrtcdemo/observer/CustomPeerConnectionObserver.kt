@@ -4,7 +4,7 @@ import android.util.Log
 import org.webrtc.*
 import org.webrtc.PeerConnection.*
 
-class CustomPeerConnectionObserver
+open class CustomPeerConnectionObserver
 constructor(var logTag: String) : Observer {
 
     init {
