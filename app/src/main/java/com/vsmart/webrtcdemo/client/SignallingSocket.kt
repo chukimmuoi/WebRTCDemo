@@ -139,32 +139,29 @@ class SignallingSocket {
                     TAG,
                     "message call(${IConstants.EVENT_MESSAGE}) called with: args = [" + Arrays.toString(args) + "]"
                 )
-                when(args[0]) {
-                    args[0] is String -> {
-                        val data = args[0] as String
-                        Log.d(TAG, "String received :: $data")
-                        if (data.equals(IConstants.RESULT_GOT_USER_MEDIA, ignoreCase = true)) {
-                            callback.onTryToStart()
-                        }
-                        if (data.equals(IConstants.RESULT_BYE, ignoreCase = true)) {
-                            callback.onRemoteHangUp(data)
-                        }
+                if (args[0] is String) {
+                    val data = args[0] as String
+                    Log.d(TAG, "String received :: $data")
+                    if (data.equals(IConstants.RESULT_GOT_USER_MEDIA, ignoreCase = true)) {
+                        callback.onTryToStart()
                     }
-                    args[0] is JSONObject -> {
-                        try {
-                            val data = args[0] as JSONObject
-                            Log.d(TAG, "Json Received :: $data")
-                            val type = data.getString(IConstants.RESULT_TYPE)
-                            if (type.equals(IConstants.RESULT_OFFER, ignoreCase = true)) {
-                                callback.onOfferReceived(data)
-                            } else if (type.equals(IConstants.RESULT_ANSWER, ignoreCase = true) && isStarted) {
-                                callback.onAnswerReceived(data)
-                            } else if (type.equals(IConstants.RESULT_CANDIDATE, ignoreCase = true) && isStarted) {
-                                callback.onIceCandidateReceived(data)
-                            }
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
+                    if (data.equals(IConstants.RESULT_BYE, ignoreCase = true)) {
+                        callback.onRemoteHangUp(data)
+                    }
+                } else if (args[0] is JSONObject) {
+                    try {
+                        val data = args[0] as JSONObject
+                        Log.d(TAG, "Json Received :: $data")
+                        val type = data.getString(IConstants.RESULT_TYPE)
+                        if (type.equals(IConstants.RESULT_OFFER, ignoreCase = true)) {
+                            callback.onOfferReceived(data)
+                        } else if (type.equals(IConstants.RESULT_ANSWER, ignoreCase = true) && isStarted) {
+                            callback.onAnswerReceived(data)
+                        } else if (type.equals(IConstants.RESULT_CANDIDATE, ignoreCase = true) && isStarted) {
+                            callback.onIceCandidateReceived(data)
                         }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
                     }
                 }
             }

@@ -33,8 +33,8 @@ import retrofit2.Response
 import java.io.UnsupportedEncodingException
 import kotlin.math.roundToInt
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, SignalingInterface {
-    private val TAG = MainActivity::class.java.name
+class MainActivityKotlin : AppCompatActivity(), View.OnClickListener, SignalingInterface {
+    private val TAG = MainActivityKotlin::class.java.name
 
     private val rootEglBase by lazy { EglBase.create() }
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SignalingInterfa
         MediaConstraints()
     }
 
-    var videoSource: VideoSource? = null
+    var videoSource: VideoSource?    = null
     var localVideoTrack: VideoTrack? = null
 
     var audioSource: AudioSource?    = null
@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SignalingInterfa
     override fun onClick(v: View) {
         when (v.id) {
             R.id.startCall -> {
-                start()
+
             }
             R.id.initCall -> {
                 call()
@@ -326,19 +326,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SignalingInterfa
     }
 
     private fun updateVideoViews(remoteVisible: Boolean) {
-        runOnUiThread {
-            var params = surfaceRenderLocal.layoutParams
-            if (remoteVisible) {
-                params.height = dpToPx(100)
-                params.width  = dpToPx(100)
-            } else {
-                params = FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-            }
-            surfaceRenderLocal.layoutParams = params
-        }
+//        runOnUiThread {
+//            var params = surfaceRenderLocal.layoutParams
+//            if (remoteVisible) {
+//                params.height = dpToPx(100)
+//                params.width  = dpToPx(100)
+//            } else {
+//                params = FrameLayout.LayoutParams(
+//                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                    ViewGroup.LayoutParams.MATCH_PARENT
+//                )
+//            }
+//            surfaceRenderLocal.layoutParams = params
+//        }
     }
 
     /**
@@ -506,7 +506,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SignalingInterfa
 
     fun showToast(msg: String) {
         runOnUiThread {
-            Toast.makeText(this@MainActivity, msg, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivityKotlin, msg, Toast.LENGTH_SHORT).show()
         }
     }
 
