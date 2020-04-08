@@ -1,5 +1,6 @@
 package com.vsmart.webrtcdemo.client
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.vsmart.webrtcdemo.data.constant.IConstants
 import io.socket.client.IO
@@ -9,7 +10,11 @@ import org.json.JSONObject
 import org.webrtc.IceCandidate
 import org.webrtc.SessionDescription
 import java.net.URISyntaxException
+import java.security.cert.X509Certificate
 import java.util.*
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 class SignallingSocket {
     private val TAG = SignallingSocket::class.java.name
@@ -21,6 +26,24 @@ class SignallingSocket {
     var isChannelReady = false
     var isInitiator    = false
     var isStarted      = false
+
+    //This piece of code should not go into production!!
+    //This will help in cases where the node server is running in non-https server and you want to ignore the warnings
+    @SuppressLint("TrustAllX509TrustManager")
+    private val trustAllCerts =
+        arrayOf<TrustManager>(object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate> {
+                return arrayOf()
+            }
+
+            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+
+            }
+
+            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+
+            }
+        })
 
     companion object {
         private var instance: SignallingSocket? = null
@@ -42,6 +65,11 @@ class SignallingSocket {
         this.callback = signalingInterface
 
         try {
+            val sslContext = SSLContext.getInstance("TLS")
+            sslContext.init(null, trustAllCerts, null)
+            IO.setDefaultHostnameVerifier { _, _ -> true }
+            IO.setDefaultSSLContext(sslContext)
+
             socket = IO.socket(IConstants.IO_SOCKET)
             socket.connect()
             Log.d(TAG, "init() called")
