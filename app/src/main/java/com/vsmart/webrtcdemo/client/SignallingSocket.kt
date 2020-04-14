@@ -29,21 +29,21 @@ class SignallingSocket {
 
     //This piece of code should not go into production!!
     //This will help in cases where the node server is running in non-https server and you want to ignore the warnings
-    @SuppressLint("TrustAllX509TrustManager")
-    private val trustAllCerts =
-        arrayOf<TrustManager>(object : X509TrustManager {
-            override fun getAcceptedIssuers(): Array<X509Certificate> {
-                return arrayOf()
-            }
-
-            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
-
-            }
-
-            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
-
-            }
-        })
+//    @SuppressLint("TrustAllX509TrustManager")
+//    private val trustAllCerts =
+//        arrayOf<TrustManager>(object : X509TrustManager {
+//            override fun getAcceptedIssuers(): Array<X509Certificate> {
+//                return arrayOf()
+//            }
+//
+//            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+//
+//            }
+//
+//            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+//
+//            }
+//        })
 
     companion object {
         private var instance: SignallingSocket? = null
@@ -65,10 +65,10 @@ class SignallingSocket {
         this.callback = signalingInterface
 
         try {
-            val sslContext = SSLContext.getInstance("TLS")
-            sslContext.init(null, trustAllCerts, null)
-            IO.setDefaultHostnameVerifier { _, _ -> true }
-            IO.setDefaultSSLContext(sslContext)
+//            val sslContext = SSLContext.getInstance("TLS")
+//            sslContext.init(null, trustAllCerts, null)
+//            IO.setDefaultHostnameVerifier { _, _ -> true }
+//            IO.setDefaultSSLContext(sslContext)
 
             socket = IO.socket(IConstants.IO_SOCKET)
             socket.connect()
